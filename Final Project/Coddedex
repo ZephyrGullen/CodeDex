@@ -1,0 +1,63 @@
+import random
+
+# List of five-letter words
+valid_words = ["apple", "bread", "crane", "stone", "flame", "grape", "plaza", "shard", "track", "water"]
+
+def get_feedback(guess, correct_word):
+    feedback = []
+
+    # Check for correct letters and positions (green)
+    for i in range(len(guess)):
+        if guess[i] == correct_word[i]:
+            feedback.append('G')  # G for Green (correct letter, correct position)
+        elif guess[i] in correct_word:
+            feedback.append('Y')  # Y for Yellow (correct letter, wrong position)
+        else:
+            feedback.append('X')  # X for Gray (incorrect letter)
+
+    return ''.join(feedback)
+
+def play_wordle():
+    # Randomly select a word
+    correct_word = random.choice(valid_words)
+    
+    print("Welcome to Wordle!")
+    print("Try to guess the 5-letter word.")
+    print("Feedback: G = Correct letter and position, Y = Correct letter but wrong position, X = Wrong letter.")
+    
+    attempts = 6  # Number of allowed attempts
+    guessed_words = []
+
+    # Game loop
+    while attempts > 0:
+        print(f"\nYou have {attempts} attempts left.")
+        guess = input("Enter your guess (5 letters): ").lower()
+        
+        # Check for valid input
+        if len(guess) != 5 or not guess.isalpha():
+            print("Invalid input! Please enter exactly 5 letters.")
+            continue
+        
+        if guess in guessed_words:
+            print("You already guessed that word. Try something new.")
+            continue
+        
+        # Provide feedback on the guess
+        feedback = get_feedback(guess, correct_word)
+        print(f"Feedback: {feedback}")
+        
+        # Track guesses to avoid repetition
+        guessed_words.append(guess)
+        
+        # Check if the guess is correct
+        if guess == correct_word:
+            print(f"Congratulations! You've guessed the word '{correct_word}' correctly!")
+            break
+
+        attempts -= 1
+
+    if attempts == 0:
+        print(f"Sorry, you've run out of attempts. The correct word was '{correct_word}'.")
+
+# Start the game
+play_wordle()
